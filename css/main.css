@@ -1,0 +1,183 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  font: 60px/1em "Cabin", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body.night {
+  background: #222;
+  color: aliceblue;
+}
+
+#container {
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
+  width: 50%;
+  min-width: 35rem;
+  height: min-content;
+  line-height: 110%;
+}
+
+span {
+  color: #f3ba2f;
+  font-weight: bold;
+}
+
+#oof {
+  background: #ababab50;
+  color: #222;
+}
+
+.night #oof {
+  background: #ababab30;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: #b8b8b8;
+}
+
+footer p {
+  font-size: 0.3em;
+  line-height: 1.5em;
+  color: #666;
+}
+
+p {
+  margin: 0.65em 0;
+}
+
+#oops {
+  padding: 1em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+#tips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  font-size: 0.3em;
+  user-select: none;
+  border-top: 2px solid #b8b8b8;
+  margin-top: 1em;
+  display: none;
+}
+
+#tips p {
+  display: inline-block;
+  color: #474747;
+  font-size: 1.125em;
+  line-height: 100%;
+  margin: 0;
+}
+
+.night #tips p {
+  color: #b8b8b8;
+}
+
+.tip {
+  cursor: pointer;
+  display: inline-block;
+}
+
+#tips > *:not(:first-child) {
+  padding-left: 10px;
+}
+
+#tips > *:not(:last-child):not(:first-child) {
+  padding-right: 10px;
+  border-right: 2px solid #b8b8b8;
+}
+
+.tip div {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+.tip svg {
+  margin-right: 2.5px;
+  height: 15px;
+  fill: #474747;
+}
+
+.night .tip svg {
+  fill: #b8b8b8;
+}
+
+.tip span {
+  line-height: 100%;
+  color: #474747;
+  font-weight: normal;
+}
+
+.night .tip span {
+  color: #b8b8b8;
+}
+
+.tip span:hover {
+  text-decoration: underline;
+}
+
+.toggle,
+#exportButton {
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+  border: 2px solid #222;
+  border-radius: 50%;
+  padding: 7.5px;
+  margin: 0;
+  line-height: 100%;
+  vertical-align: middle;
+  fill: #222;
+}
+
+.toggle.active,
+#exportButton.active {
+  fill: #fff;
+  border: 2px solid #fff;
+}
+
+.toggle .dayIcon {
+  display: none;
+}
+
+.toggle .nightIcon {
+  display: block;
+}
+
+.toggle.active .nightIcon {
+  display: none;
+}
+
+.toggle.active .dayIcon {
+  display: block;
+}
+
+@media only screen and (max-device-width: 480px) {
+  #container {
+    font-size: 35px;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    min-width: unset;
+  }
+}
