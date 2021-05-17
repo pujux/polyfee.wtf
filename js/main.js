@@ -19,7 +19,7 @@ async function init() {
           <strong>
             <a href="https://metamask.io">MetaMask</a>
           </strong> 
-          or pass an address via the url (like <strong><a href="http://fees.wtf?address=0xcdd6a2b9dd3e386c8cd4a7ada5cab2f1c561182d">this</a></strong>).
+          or pass an address via the url (like <strong><a href="https://bscfee.wtf?address=0x60b0f34c4d8e024a1928645ff8b861ecdca05fbc">this</a></strong>).
         </p>`);
       return;
     }
@@ -98,6 +98,13 @@ async function init() {
         `$ ${((bnbPrice * gasFeeTotalFail) / 1e18).toFixed(2)}`
       );
     }
+  } else {
+    $("#gasUsedTotal").text(0);
+    $("#gasPricePerTx").text(0);
+    $("#gasFeeTotal").text("nothing");
+    $("#gasFeeTotalFail").text("nothing");
+    $("#dollarFeePrice").text("nothing");
+    $("#dollarFeeFailedPrice").text("literally nothing");
   }
 }
 
