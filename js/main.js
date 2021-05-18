@@ -24,7 +24,6 @@ async function init() {
       return;
     }
   }
-  console.info("Getting transactions for " + address);
   let {
     binancecoin: { usd: bnbPrice },
   } = await fetch(
@@ -38,10 +37,17 @@ async function init() {
   let key = "BWP2T3SYJWNZ8GJAYU13E34S9UDVD6WRET";
   let txs = [],
     txLength = 0;
+  console.info(
+    `Getting ${
+      params.testnet ? "testnet" : "mainnet"
+    } transactions for ${address}`
+  );
   do {
     let fromBlock = txs.length > 0 ? txs[txs.length - 1].blockNumber : 0;
     let response = await fetch(
-      `https://api.bscscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
+      `https://api${
+        params.testnet ? "-testnet" : ""
+      }.bscscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
     );
     if (response.ok) {
       const { result: txs2 } = await response.json();
@@ -68,21 +74,25 @@ async function init() {
 
   if (txsOut.length > 0) {
     const gasUsed = txsOut.map((tx) => parseInt(tx.gasUsed));
-    const gasUsedTotal = gasUsed.reduce((a, b) => a + b);
+    const gasUsedTotal = gasUsed.reduce((a, b) => a + b, 0);
     const gasPrices = txsOut.map((tx) => parseInt(tx.gasPrice));
     const minMaxPrices = [Math.min(...gasPrices), Math.max(...gasPrices)];
     const gasFeeTotal = gasPrices
       .map((price, i) => price * gasUsed[i])
-      .reduce((a, b) => a + b);
-    const gasPriceTotal = gasPrices.reduce((a, b) => a + b);
+      .reduce((a, b) => a + b, 0);
+    const gasPriceTotal = gasPrices.reduce((a, b) => a + b, 0);
 
     const gasUsedFail = txsOutFail.map((tx) => parseInt(tx.gasUsed));
     const gasPricesFail = txsOutFail.map((tx) => parseInt(tx.gasPrice));
     const gasFeeTotalFail = gasPricesFail
       .map((price, i) => price * gasUsedFail[i])
-      .reduce((a, b) => a + b);
+      .reduce((a, b) => a + b, 0);
 
-    $("#gasUsedTotal").text(formatter(gasUsedTotal));
+    $("#gasUsedTotal").text(
+      gasUsedTotal > 999999
+        ? `${(gasUsedTotal / 1e6).toFixed(3)} million`
+        : gasUsedTotal.toLocaleString("en-US")
+    );
     $("#gasPricePerTx").text((gasPriceTotal / txsOut.length / 1e9).toFixed(1));
     $("#gasFeeTotal").text(`${(gasFeeTotal / 1e18).toFixed(3)} BNB`);
     $("#gasFeeTotalFail").text(
@@ -92,10 +102,14 @@ async function init() {
     );
     if (bnbPrice) {
       $("#dollarFeePrice").text(
-        `$ ${((bnbPrice * gasFeeTotal) / 1e18).toFixed(2)}`
+        gasFeeTotal === 0
+          ? "nothing"
+          : `$ ${((bnbPrice * gasFeeTotal) / 1e18).toFixed(2)}`
       );
       $("#dollarFeeFailedPrice").text(
-        `$ ${((bnbPrice * gasFeeTotalFail) / 1e18).toFixed(2)}`
+        gasFeeTotalFail === 0
+          ? "nothing"
+          : `$ ${((bnbPrice * gasFeeTotalFail) / 1e18).toFixed(2)}`
       );
     }
   } else {
@@ -104,12 +118,8 @@ async function init() {
     $("#gasFeeTotal").text("nothing");
     $("#gasFeeTotalFail").text("nothing");
     $("#dollarFeePrice").text("nothing");
-    $("#dollarFeeFailedPrice").text("literally nothing");
+    $("#dollarFeeFailedPrice").text("nothing");
   }
-}
-
-function formatter(num) {
-  return num > 999999 ? `${(num / 1e6).toFixed(3)} million` : num;
 }
 
 function getUrlParams() {
@@ -128,16 +138,23 @@ async function tip(amount) {
     window.hasOwnProperty("ethereum") &&
     window.ethereum.hasOwnProperty("isMetaMask")
   ) {
-    await ethereum.request({
-      method: "eth_sendTransaction",
-      params: [
-        {
-          from: ethereum.selectedAddress,
-          to: "0x7931f829Bc6e95A8425388e5Bb06EcBfB9336C33",
-          value: parseInt(amount).toString(16),
-        },
-      ],
-    });
+    ethereum
+      .request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: ethereum.selectedAddress,
+            to: "0x7931f829Bc6e95A8425388e5Bb06EcBfB9336C33",
+            value: (amount * 1e18).toString(16),
+          },
+        ],
+      })
+      .then((txHash) => {
+        console.log(txHash);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   } else {
     return alert(
       "Install MetaMask to use this cool feature. https://metamask.io"
