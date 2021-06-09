@@ -23,13 +23,13 @@ body.night {
   padding: 0;
   margin: 0 auto;
   width: 50%;
-  min-width: 35rem;
+  min-width: 45rem;
   height: min-content;
   line-height: 110%;
 }
 
 span {
-  color: #f3ba2f;
+  color: #8247e5;
   font-weight: bold;
 }
 
@@ -111,9 +111,8 @@ p {
 }
 
 .tip svg {
-  margin-right: 2.5px;
-  height: 15px;
-  fill: #474747;
+  margin-right: 5px;
+  height: 16px;
 }
 
 .night .tip svg {

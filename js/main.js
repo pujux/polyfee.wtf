@@ -19,35 +19,29 @@ async function init() {
           <strong>
             <a href="https://metamask.io">MetaMask</a>
           </strong> 
-          or pass an address via the url (like <strong><a href="https://bscfee.wtf?address=0x60b0f34c4d8e024a1928645ff8b861ecdca05fbc">this</a></strong>).
+          or pass an address via the url (like <strong><a href="https://polyfee.wtf?address=0x60b0f34c4d8e024a1928645ff8b861ecdca05fbc">this</a></strong>).
         </p>`);
       return;
     }
   }
   let {
-    binancecoin: { usd: bnbPrice },
+    "matic-network": { usd: maticPrice },
   } = await fetch(
-    "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd"
+    "https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd"
   )
     .then((res) => res.json())
     .catch((err) => console.error("(╯°□°)╯︵ ┻━┻", err));
-  if (!bnbPrice) return;
-  console.log("BNBUSD: $" + bnbPrice);
+  if (!maticPrice) return;
+  console.log("MATICUSD: $" + maticPrice);
 
-  let key = "BWP2T3SYJWNZ8GJAYU13E34S9UDVD6WRET";
+  let key = "XN5KHF4Z412GAKSINFC74WX91U8FEFZDEU";
   let txs = [],
     txLength = 0;
-  console.info(
-    `Getting ${
-      params.testnet ? "testnet" : "mainnet"
-    } transactions for ${address}`
-  );
+  console.info(`Getting mainnet transactions for ${address}`);
   do {
     let fromBlock = txs.length > 0 ? txs[txs.length - 1].blockNumber : 0;
     let response = await fetch(
-      `https://api${
-        params.testnet ? "-testnet" : ""
-      }.bscscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
+      `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
     );
     if (response.ok) {
       const { result: txs2 } = await response.json();
@@ -91,25 +85,25 @@ async function init() {
     $("#gasUsedTotal").text(
       gasUsedTotal > 999999
         ? `${(gasUsedTotal / 1e6).toFixed(3)} million`
-        : gasUsedTotal.toLocaleString("en-US")
+        : gasUsedTotal.toLocaleString("en-US", { maximumFractionDigits: 5 })
     );
     $("#gasPricePerTx").text((gasPriceTotal / txsOut.length / 1e9).toFixed(1));
-    $("#gasFeeTotal").text(`${(gasFeeTotal / 1e18).toFixed(3)} BNB`);
+    $("#gasFeeTotal").text(`${(gasFeeTotal / 1e18).toFixed(5)} MATIC`);
     $("#gasFeeTotalFail").text(
       txsOutFail.length > 0
-        ? `${(gasFeeTotalFail / 1e18).toFixed(3)} BNB`
+        ? `${(gasFeeTotalFail / 1e18).toFixed(5)} MATIC`
         : "nothing"
     );
-    if (bnbPrice) {
+    if (maticPrice) {
       $("#dollarFeePrice").text(
         gasFeeTotal === 0
           ? "nothing"
-          : `$ ${((bnbPrice * gasFeeTotal) / 1e18).toFixed(2)}`
+          : `${((maticPrice * gasFeeTotal) / 1e16).toFixed(2)} cents`
       );
       $("#dollarFeeFailedPrice").text(
         gasFeeTotalFail === 0
           ? "nothing"
-          : `$ ${((bnbPrice * gasFeeTotalFail) / 1e18).toFixed(2)}`
+          : `${((maticPrice * gasFeeTotalFail) / 1e16).toFixed(2)} cents`
       );
     }
   } else {

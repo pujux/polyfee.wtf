@@ -1,5 +1,5 @@
 {
-  "name": "bscfee.wtf",
+  "name": "polyfee.wtf",
   "version": "0.0.1",
   "author": "puf17640",
   "license": "MIT",
@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/puf17640/bscfee.wtf.git"
+    "url": "git+https://github.com/puf17640/polyfee.wtf.git"
   },
   "bugs": {
-    "url": "https://github.com/puf17640/bscfee.wtf/issues"
+    "url": "https://github.com/puf17640/polyfee.wtf/issues"
   },
-  "homepage": "https://github.com/puf17640/bscfee.wtf#readme",
+  "homepage": "https://github.com/puf17640/polyfee.wtf#readme",
   "description": ""
 }
