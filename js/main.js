@@ -19,7 +19,7 @@ async function init() {
           <strong>
             <a href="https://metamask.io">MetaMask</a>
           </strong> 
-          or pass an address via the url (like <strong><a href="https://polyfee.wtf?address=0x60b0f34c4d8e024a1928645ff8b861ecdca05fbc">this</a></strong>).
+          or pass an address via the url (like <strong><a href="https://polyfee.wtf?address=0x817887f7537ca8ae5409cb68c23242ee66a71557">this</a></strong>).
         </p>`);
       return;
     }
