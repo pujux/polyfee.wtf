@@ -95,15 +95,17 @@ async function init() {
         : "nothing"
     );
     if (maticPrice) {
+      const feePrice = (maticPrice * gasFeeTotal) / 1e16;
+      const failFeePrice = (maticPrice * gasFeeTotalFail) / 1e16
       $("#dollarFeePrice").text(
         gasFeeTotal === 0
           ? "nothing"
-          : `${((maticPrice * gasFeeTotal) / 1e16).toFixed(2)} cents`
+          : `${feePrice > 100 ? `$ ${(feePrice / 100).toFixed(2)}` : `${feePrice.toFixed(2)} cents`}`
       );
       $("#dollarFeeFailedPrice").text(
         gasFeeTotalFail === 0
           ? "nothing"
-          : `${((maticPrice * gasFeeTotalFail) / 1e16).toFixed(2)} cents`
+          : `${failFeePrice > 100 ? `$ ${(failFeePrice / 100).toFixed(2)}` : `${failFeePrice.toFixed(2)} cents`}`
       );
     }
   } else {
@@ -138,7 +140,7 @@ async function tip(amount) {
         params: [
           {
             from: ethereum.selectedAddress,
-            to: "0x7931f829Bc6e95A8425388e5Bb06EcBfB9336C33",
+            to: "0x60CDac3cd0Ba3445D776B31B46E34623723C6482",
             value: (amount * 1e18).toString(16),
           },
         ],
