@@ -159,17 +159,17 @@ async function tip(amount) {
 }
 
 $(document).on("click", "#tinytip", function (e) {
-  tip("0.1");
-  e.preventDefault();
-});
-
-$(document).on("click", "#smalltip", function (e) {
   tip("1");
   e.preventDefault();
 });
 
-$(document).on("click", "#bigtip", function (e) {
+$(document).on("click", "#smalltip", function (e) {
   tip("10");
+  e.preventDefault();
+});
+
+$(document).on("click", "#bigtip", function (e) {
+  tip("25");
   e.preventDefault();
 });
 
