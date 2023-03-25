@@ -44,8 +44,7 @@ async function init() {
   do {
     let fromBlock = txs.length > 0 ? txs[txs.length - 1].blockNumber : 0;
     let response = await fetch(
-      `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`,
-      noCorsFetchOptions
+      `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
     );
     if (response.ok) {
       const { result: txs2 } = await response.json();
