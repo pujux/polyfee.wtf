@@ -1,3 +1,5 @@
+const noCorsFetchOptions = { headers: { mode: 'cors' } };
+
 async function init() {
   let params = getUrlParams();
   let address = params.address || params.a || null;
@@ -27,7 +29,8 @@ async function init() {
   let {
     "matic-network": { usd: maticPrice },
   } = await fetch(
-    "https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd"
+    "https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd",
+    noCorsFetchOptions
   )
     .then((res) => res.json())
     .catch((err) => console.error("(╯°□°)╯︵ ┻━┻", err));
@@ -41,7 +44,8 @@ async function init() {
   do {
     let fromBlock = txs.length > 0 ? txs[txs.length - 1].blockNumber : 0;
     let response = await fetch(
-      `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`
+      `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=99999999&sort=asc&apikey=${key}`,
+      noCorsFetchOptions
     );
     if (response.ok) {
       const { result: txs2 } = await response.json();
